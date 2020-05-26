@@ -17,21 +17,6 @@ services:
       - db
       - rabbitmq
     command: python ./manage.py runserver 0.0.0.0:${PORT}
-  # websocket:
-  #   build:
-  #     context: ./
-  #     dockerfile: ./Dockerfile.dev.kura
-  #   volumes:
-  #     - ./kura:/usr/src/app/
-  #   ports:
-  #     - 5000:5000
-  #     - 5001:5001
-  #   env_file:
-  #     - ./.env
-  #   depends_on:
-  #     - db
-  #     - rabbitmq
-  #   command: uwsgi --http :5000 --module websocket --master --processes 4
   db:
     image: postgres:${PG_VERSION}
     ports:
@@ -50,15 +35,17 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DEVELOPMENT=${DEVELOPMENT}
-  pg_amqp_bridge:
-    image: subzerocloud/pg-amqp-bridge
+  pg_rabbit_proxy:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.dev.kura
     env_file:
       - ./.env
     environment:
       - RUST_LOG=info
       - POSTGRESQL_URI=postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:5432/${DB_NAME}
       - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_HOST}//
-      - BRIDGE_CHANNELS=chat:amq.fanout
+      - PROXY_TABLES=events:chat_exchange_uri
     depends_on:
       - db
       - rabbitmq
