@@ -165,3 +165,11 @@ NOTIFICATIONS_CHANNELS = {
     'websocket': 'chat.channels.BroadCastWebSocketChannel'
 }
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(os.path.join(BASE_DIR, 'spa'), 'build', 'static'),
+]
+
+REACT_APP = (
+    os.path.join(BASE_DIR, 'spa')
+)

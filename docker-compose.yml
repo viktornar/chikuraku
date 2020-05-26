@@ -17,6 +17,21 @@ services:
       - db
       - rabbitmq
     command: python ./manage.py runserver 0.0.0.0:${PORT}
+  # websocket:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./Dockerfile.dev.kura
+  #   volumes:
+  #     - ./kura:/usr/src/app/
+  #   ports:
+  #     - 5000:5000
+  #     - 5001:5001
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - db
+  #     - rabbitmq
+  #   command: uwsgi --http :5000 --module websocket --master --processes 4
   db:
     image: postgres:${PG_VERSION}
     ports:
