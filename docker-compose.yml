@@ -35,17 +35,15 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DEVELOPMENT=${DEVELOPMENT}
-  pg_rabbit_proxy:
-    build:
-      context: ./
-      dockerfile: ./Dockerfile.dev.kura
+  pg_amqp_bridge:
+    image: subzerocloud/pg-amqp-bridge
     env_file:
       - ./.env
     environment:
       - RUST_LOG=info
       - POSTGRESQL_URI=postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:5432/${DB_NAME}
       - AMQP_URI=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@${RABBITMQ_HOST}//
-      - PROXY_TABLES=events:chat_exchange_uri
+      - BRIDGE_CHANNELS=chat:amq.fanout
     depends_on:
       - db
       - rabbitmq

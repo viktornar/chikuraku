@@ -35,7 +35,7 @@ class BroadCastWebSocketChannel(BaseNotificationChannel):
 
         uri = self.notification_kwargs['extra_data']['uri']
 
-        channel.exchange_declare(exchange=uri, exchange_type='fanout')
-        channel.basic_publish(exchange=uri, routing_key='', body=message)
+        channel.exchange_declare(exchange='ampq.fanout', exchange_type='fanout')
+        channel.basic_publish(exchange='ampq.fanout', routing_key=uri, body=message)
 
         connection.close()
