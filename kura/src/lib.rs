@@ -11,8 +11,8 @@ use std::time::Duration;
 
 use amqp::{AMQPError, Basic, Channel, protocol, Session, Table};
 use fallible_iterator::FallibleIterator;
-use postgres::{Error, NoTls};
-use r2d2::{ManageConnection, Pool, PooledConnection};
+use postgres::{NoTls};
+use r2d2::{Pool, PooledConnection};
 use r2d2_postgres::PostgresConnectionManager;
 
 const SEPARATOR: char = '|';
@@ -167,13 +167,13 @@ fn spawn_listener_publisher(mut pg_conn: PooledConnection<PostgresConnectionMana
 }
 
 pub fn wait_for_amqp_session(amqp_uri: &str, exchange_uri: &str) -> Session {
-    println!("Attempting to obtain connection on AMQP server for {} channel..", exchange_uri);
+    println!("Attempting to obtain connection on AMQP server for {} channel...", exchange_uri);
     let mut s = Session::open_url(amqp_uri);
     let mut i = 1;
     while let Err(e) = s {
         println!("{:?}", e);
         let time = Duration::from_secs(i);
-        println!("Retrying the AMQP connection for {} channel in {:?} seconds..", exchange_uri, time.as_secs());
+        println!("Retrying the AMQP connection for {} channel in {:?} seconds...", exchange_uri, time.as_secs());
         thread::sleep(time);
         s = Session::open_url(amqp_uri);
         i *= 2;
