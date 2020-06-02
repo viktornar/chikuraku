@@ -1,0 +1,9 @@
+@import "./components/SignInForm.scss";
+
+.SignIn {
+  text-align: center;
+
+  &__title {
+    margin-bottom: 3.2rem;
+  }
+}
