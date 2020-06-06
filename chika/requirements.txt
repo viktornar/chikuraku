@@ -4,7 +4,7 @@ astroid==2.4.1
 billiard==3.6.3.0
 celery==4.4.2
 certifi==2020.4.5.1
-Django==3.0.3
+Django==3.0.7
 django-cors-headers==3.3.0
 django-notifs==2.6.2
 django-templated-mail==1.1.1
